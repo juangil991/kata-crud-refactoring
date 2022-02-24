@@ -11,6 +11,9 @@ public class TodoDto implements Serializable {
     private boolean completed;
     private String groupListId;
 
+    public TodoDto() {
+    }
+
     public Long getId() {
         return id;
     }
