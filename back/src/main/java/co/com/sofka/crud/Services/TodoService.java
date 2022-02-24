@@ -47,6 +47,12 @@ public class TodoService {
         TodoDto todoDto = getTodoById(id);
         repository.deleteById(todoDto.getId());
     }
+    public void deleteToDoByGroupListId(String groupListId){
+        Iterable<TodoDto> todoDtos=getAllToDo(groupListId);
+        todoDtos.forEach(item->{
+            deleteToDoById(item.getId());
+        });
+    }
 
     public TodoDto getTodoById(Long id){
         ModelMapper modelMapper = new ModelMapper();

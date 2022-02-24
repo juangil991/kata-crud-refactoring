@@ -39,6 +39,11 @@ public class TodoController {
         service.deleteToDoById(id);
     }
 
+    @DeleteMapping(value = "api/todo/{groupListId}")
+    public void deleteByGroupListId(@PathVariable("groupListId")String grouplistId){
+        service.deleteToDoByGroupListId(grouplistId);
+    }
+
     @GetMapping(value = "api/{id}/todo")
     public TodoDto get(@PathVariable("id") Long id){
         return service.getTodoById(id);
