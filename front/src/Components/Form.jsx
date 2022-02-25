@@ -1,16 +1,18 @@
-import React, { useContext, useState, useRef } from 'react';
+import React, { useContext, useState, useRef,Fragment } from 'react';
 import Store from '../Context/todoContext';
 
 
-const Form = ({ HOST }) => {
+const Form = (props) => {
   const formRef = useRef(null);
   const { dispatch, state: { todo } } = useContext(Store);
   const item = todo.item;
   const [state, setState] = useState(item);
+  const [listName,setListName]=useState(props.nombre);
+  
 
   const onAdd = (event) => {
     event.preventDefault();
-
+    console.log(listName.Name)
 
     const request = {
       name: state.name,
@@ -18,7 +20,7 @@ const Form = ({ HOST }) => {
       completed: false
     };
 
-    fetch(HOST + "/todo", {
+    fetch(props.HOST + "/todo", {
       method: "POST",
       body: JSON.stringify(request),
       headers: {
@@ -43,7 +45,7 @@ const Form = ({ HOST }) => {
     };
 
 
-    fetch(HOST + "/todo", {
+    fetch(props.HOST + "/todo", {
       method: "PUT",
       body: JSON.stringify(request),
       headers: {
@@ -58,28 +60,39 @@ const Form = ({ HOST }) => {
       });
   }
 
-  return <form className='row g-3' ref={formRef}>
+  return( 
+    <Fragment>
+      <form className='row g-3'key={props.nombre}>
+        <div className='col-auto'>
+            <h1>{listName.Name}</h1>
+        </div>
+        <div className='col-auto'>
+          <button className='btn btn-danger mx-2' >Eliminar</button>
+        </div>
+    </form>
+    <hr/>
+    <form className='row g-3' ref={formRef}>
     <div className='col-auto mt-4'>
       AGREGAR To-Do 
     </div>
     <div className='col-auto'>
-      <label for="inputPassword2" class="visually-hidden">Password</label>
       <input type="text"
        name='name' 
        className='form-control' 
-       placeholder='¿Que piensas Hacer Hoy'
+       placeholder='¿Que piensas Hacer Hoy?'
        defaultValue={item.name}
        onChange={(event) => {
         setState({ ...state, name: event.target.value })
       }}
        />
     </div>
-    <div class="col-auto">
+    <div className='col-auto'>
     {item.id && <button className='btn btn-primary mb-3' onClick={onEdit} >Actualizar</button>}
     {!item.id && <button className='btn btn-primary mb-3' onClick={onAdd} >Crear</button>}
     </div>
 
   </form>
+  </Fragment>)
 }
 
 export default Form;
