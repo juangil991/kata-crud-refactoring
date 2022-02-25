@@ -1,13 +1,14 @@
-import React, {useEffect, useContext} from 'react'
+import React, {useEffect, useContext, useState} from 'react'
 import Store from '../Context/todoContext';
 
-const List = ({HOST}) => {
+const List = (props) => {
     
     const { dispatch, state: {todo} } = useContext(Store);
-    const currentList = todo.list;
+    const [listName,setListName]=useState(props.nombre);
+    const currentList = todo.list.filter((item)=>listName.Name===item.groupListId );
   
     useEffect(() => {
-      fetch(HOST + "/todos")
+      fetch(props.HOST + "/todos"+"/")
         .then(response => response.json())
         .then((list) => {
           dispatch({ type: "update-list", list })
@@ -16,7 +17,8 @@ const List = ({HOST}) => {
   
   
     const onDelete = (id) => {
-      fetch(HOST + "/" + id + "/todo", {
+      console.log(listName)
+      fetch(props.HOST + "/" + id + "/todo", {
         method: "DELETE"
       }).then((list) => {
         dispatch({ type: "delete-item", id })
@@ -33,7 +35,7 @@ const List = ({HOST}) => {
         id: todo.id,
         completed: event.target.checked
       };
-      fetch(HOST + "/todo", {
+      fetch(props.HOST + "/todo", {
         method: "PUT",
         body: JSON.stringify(request),
         headers: {
@@ -60,6 +62,7 @@ const List = ({HOST}) => {
         </thead>
         <tbody>
           {currentList.map((todo) => {
+            console.log(listName.Name)
             return <tr key={todo.id} style={todo.completed ? decorationDone : {}}>
               <td>{todo.id}</td>
               <td>{todo.name}</td>

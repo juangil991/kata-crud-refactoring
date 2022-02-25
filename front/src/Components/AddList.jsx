@@ -29,7 +29,7 @@ const AddList = (props) => {
             />
         </div>
         <div className='col-auto'>
-            <button className='btn btn-primary'>Agregar</button>
+            <button className='btn btn-success'>Agregar</button>
         </div>
 
     </form>

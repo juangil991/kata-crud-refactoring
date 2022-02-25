@@ -27,7 +27,8 @@ function App() {
             <div key={nombre}>
               <Form HOST={HOST}
               nombre ={nombre}/>
-              <List HOST={HOST} />
+              <List HOST={HOST} 
+              nombre ={nombre}/>
               <hr/>
             </div>           
           );

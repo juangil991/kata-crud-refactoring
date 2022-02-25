@@ -9,6 +9,13 @@ const Form = (props) => {
   const [state, setState] = useState(item);
   const [listName,setListName]=useState(props.nombre);
   
+  const onDelete = (id) => {
+    fetch(props.HOST + "/" + "/todo" + "/" + listName.Name , {
+      method: "DELETE"
+    }).then((list) => {
+      dispatch({ type: "delete-item", id })
+    })
+  };
 
   const onAdd = (event) => {
     event.preventDefault();
@@ -17,7 +24,8 @@ const Form = (props) => {
     const request = {
       name: state.name,
       id: null,
-      completed: false
+      completed: false,
+      groupListId:listName.Name
     };
 
     fetch(props.HOST + "/todo", {
@@ -41,7 +49,8 @@ const Form = (props) => {
     const request = {
       name: state.name,
       id: item.id,
-      isCompleted: item.isCompleted
+      isCompleted: item.isCompleted,
+      groupListId:listName.Name
     };
 
 
@@ -67,7 +76,7 @@ const Form = (props) => {
             <h1>{listName.Name}</h1>
         </div>
         <div className='col-auto'>
-          <button className='btn btn-danger mx-2' >Eliminar</button>
+          <button className='btn btn-danger mx-2' onClick={onDelete}>Eliminar</button>
         </div>
     </form>
     <hr/>
