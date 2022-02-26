@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import List from './List';
+import React, {useContext} from 'react';
 import { useForm } from "react-hook-form";
+import Store, { StoreProvider } from "../Context/todoContext";
 
 
 
@@ -8,13 +8,21 @@ const AddList = (props) => {
 
     const { register, handleSubmit, formState: { errors } } = useForm();
 
-    
 
-    const onSubmit=(data, e) =>{
+    const onSubmit = (data, e) => {
+
+        const request = {
+            name: data.Name,
+            id: null,
+        };
         e.target.reset();
-        props.setLists([
-            ...props.Lists,data
-        ])
+        fetch(props.HOST + "/list", {
+            method: "POST",
+            body: JSON.stringify(request),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
     }
 
     return (<form className='row g-3' onSubmit={handleSubmit(onSubmit)}  >
@@ -25,7 +33,7 @@ const AddList = (props) => {
             <input type="text"
                 className='mt-1'
                 placeholder='Nombre de la lista'
-                {...register("Name",{required:true, minLength:2})}
+                {...register("Name", { required: true, minLength: 2 })}
             />
         </div>
         <div className='col-auto'>

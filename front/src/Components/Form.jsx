@@ -10,7 +10,14 @@ const Form = (props) => {
   const [listName,setListName]=useState(props.nombre);
   
   const onDelete = (id) => {
-    fetch(props.HOST + "/" + "/todo" + "/" + listName.Name , {
+    console.log(listName)
+    fetch(props.HOST + "/" + "/todo" + "/" + listName , {
+      method: "DELETE"
+    }).then((list) => {
+      dispatch({ type: "delete-item", id })
+    })
+
+    fetch(props.HOST + "/" + "/list" + "/" + listName , {
       method: "DELETE"
     }).then((list) => {
       dispatch({ type: "delete-item", id })
@@ -19,13 +26,11 @@ const Form = (props) => {
 
   const onAdd = (event) => {
     event.preventDefault();
-    console.log(listName.Name)
-
     const request = {
       name: state.name,
       id: null,
       completed: false,
-      groupListId:listName.Name
+      groupListId:listName
     };
 
     fetch(props.HOST + "/todo", {
@@ -50,7 +55,7 @@ const Form = (props) => {
       name: state.name,
       id: item.id,
       isCompleted: item.isCompleted,
-      groupListId:listName.Name
+      groupListId:listName
     };
 
 
@@ -71,9 +76,9 @@ const Form = (props) => {
 
   return( 
     <Fragment>
-      <form className='row g-3'key={props.nombre}>
+      <form className='row g-3'key={props.id}>
         <div className='col-auto'>
-            <h1>{listName.Name}</h1>
+            <h1>{listName}</h1>
         </div>
         <div className='col-auto'>
           <button className='btn btn-danger mx-2' onClick={onDelete}>Eliminar</button>

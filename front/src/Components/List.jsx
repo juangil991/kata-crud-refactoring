@@ -5,7 +5,7 @@ const List = (props) => {
     
     const { dispatch, state: {todo} } = useContext(Store);
     const [listName,setListName]=useState(props.nombre);
-    const currentList = todo.list.filter((item)=>listName.Name===item.groupListId );
+    const currentList = todo.list.filter((item)=>listName===item.groupListId );
   
     useEffect(() => {
       fetch(props.HOST + "/todos"+"/")
@@ -17,7 +17,7 @@ const List = (props) => {
   
   
     const onDelete = (id) => {
-      console.log(listName)
+
       fetch(props.HOST + "/" + id + "/todo", {
         method: "DELETE"
       }).then((list) => {
@@ -33,7 +33,8 @@ const List = (props) => {
       const request = {
         name: todo.name,
         id: todo.id,
-        completed: event.target.checked
+        completed: event.target.checked,
+        groupListId:listName
       };
       fetch(props.HOST + "/todo", {
         method: "PUT",
@@ -62,8 +63,7 @@ const List = (props) => {
         </thead>
         <tbody>
           {currentList.map((todo) => {
-            console.log(listName.Name)
-            return <tr key={todo.id} style={todo.completed ? decorationDone : {}}>
+            return <tr key={props.name} style={todo.completed ? decorationDone : {}}>
               <td>{todo.id}</td>
               <td>{todo.name}</td>
               <td className='p-3'><input 

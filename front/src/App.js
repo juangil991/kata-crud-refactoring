@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { StoreProvider } from "./Context/todoContext";
+import React, { useState, Fragment } from "react";
+import Store, { StoreProvider } from "./Context/todoContext";
 import List from "./Components/List";
 import Form from "./Components/Form";
 import AddList from "./Components/AddList";
@@ -8,29 +8,33 @@ const HOST = "http://localhost:8080/api";
 
 function App() {
   const [Lists, setLists] = useState([]);
-  const [listName,setListName]=useState("");
-  const hola=()=>{ 
-    Lists.map((item)=>{
-     setListName(item)
-     console.log(listName)
-    })
+  const [listName, setListName] = useState("");
 
-  }
+  React.useEffect(() => {
+    obtenerDatos();
+  });
+
+  const obtenerDatos = async () => {
+    const data = await fetch(HOST + "/list");
+    const tables = await data.json();
+    setLists(tables);
+  };
+
   return (
     <StoreProvider>
-      <AddList Lists={Lists} setLists={setLists} />
+      <AddList HOST={HOST} />
       <hr />
       <div>
-      {Lists.map((nombre) => {
-          console.log(List)
-         return (
-            <div key={nombre}>
-              <Form HOST={HOST}
-              nombre ={nombre}/>
-              <List HOST={HOST} 
-              nombre ={nombre}/>
-              <hr/>
-            </div>           
+        {Lists.map((nombre) => {
+          return (
+            <Fragment>
+              <div key={nombre.id}>
+                <Form HOST={HOST} nombre={nombre.name} id={nombre.id} />
+              </div>            
+              <div >
+              <List HOST={HOST} nombre={nombre.name} id={nombre.id}/>
+            </div>
+            </Fragment>
           );
         })}
       </div>
