@@ -9,6 +9,7 @@ const HOST = "http://localhost:8080/api";
 function App() {
   const [Lists, setLists] = useState([]);
   const [listName, setListName] = useState("");
+  const [validate, setValidate]=useState(false);
 
   React.useEffect(() => {
     obtenerDatos();
@@ -29,10 +30,18 @@ function App() {
           return (
             <Fragment>
               <div key={nombre.id}>
-                <Form HOST={HOST} nombre={nombre.name} id={nombre.id} />
+                <Form HOST={HOST}
+                 nombre={nombre.name} 
+                 id={nombre.id} 
+                 validate={validate}
+                 setValidate={setValidate}
+                 />
               </div>            
               <div >
-              <List HOST={HOST} nombre={nombre.name} id={nombre.id}/>
+              <List HOST={HOST} 
+              nombre={nombre.name} 
+              id={nombre.id}
+              setValidate={setValidate}/>
             </div>
             </Fragment>
           );

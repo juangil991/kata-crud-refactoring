@@ -10,7 +10,6 @@ const Form = (props) => {
   const [listName,setListName]=useState(props.nombre);
   
   const onDelete = (id) => {
-    console.log(listName)
     fetch(props.HOST + "/" + "/todo" + "/" + listName , {
       method: "DELETE"
     }).then((list) => {
@@ -25,6 +24,7 @@ const Form = (props) => {
   };
 
   const onAdd = (event) => {
+    props.setValidate(false);
     event.preventDefault();
     const request = {
       name: state.name,
@@ -50,7 +50,7 @@ const Form = (props) => {
 
   const onEdit = (event) => {
     event.preventDefault();
-
+    props.setValidate(false)
     const request = {
       name: state.name,
       id: item.id,
@@ -74,6 +74,14 @@ const Form = (props) => {
       });
   }
 
+  const handleInputChange=(event)=>{
+    console.log(props.validate)
+    console.log(state)
+   event.target.value.length>1 && props.setValidate(true);
+   event.target.value.length>1 && setState({...state,name:event.target.value})
+   event.target.value.length<2 && props.setValidate(false);
+
+}
   return( 
     <Fragment>
       <form className='row g-3'key={props.id}>
@@ -90,19 +98,18 @@ const Form = (props) => {
       AGREGAR To-Do 
     </div>
     <div className='col-auto'>
-      <input type="text"
-       name='name' 
+      <input type="text" 
        className='form-control' 
        placeholder='¿Que piensas Hacer Hoy?'
        defaultValue={item.name}
-       onChange={(event) => {
-        setState({ ...state, name: event.target.value })
-      }}
-       />
+       onChange={handleInputChange} />
+       <span className="text-danger text-small d-block mb-2">
+        {!props.validate && "Minimo 2 Caracteres"}           
+       </span>
     </div>
     <div className='col-auto'>
-    {item.id && <button className='btn btn-primary mb-3' onClick={onEdit} >Actualizar</button>}
-    {!item.id && <button className='btn btn-primary mb-3' onClick={onAdd} >Crear</button>}
+    {props.validate && item.id && <button className='btn btn-primary mb-3' onClick={onEdit} >Actualizar</button>}
+    {props.validate && !item.id && <button className='btn btn-primary mb-3' onClick={onAdd} >Crear</button>}
     </div>
 
   </form>

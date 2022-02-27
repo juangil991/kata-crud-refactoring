@@ -26,6 +26,7 @@ const List = (props) => {
     };
   
     const onEdit = (todo) => {
+      props.setValidate(true);
       dispatch({ type: "edit-item", item: todo })
     };
   

@@ -1,6 +1,5 @@
-import React, {useContext} from 'react';
+import React, {useRef} from 'react';
 import { useForm } from "react-hook-form";
-import Store, { StoreProvider } from "../Context/todoContext";
 
 
 
@@ -10,12 +9,13 @@ const AddList = (props) => {
 
 
     const onSubmit = (data, e) => {
-
+        e.preventDefault();
+        e.target.reset();
         const request = {
             name: data.Name,
             id: null,
         };
-        e.target.reset();
+       
         fetch(props.HOST + "/list", {
             method: "POST",
             body: JSON.stringify(request),
@@ -25,7 +25,9 @@ const AddList = (props) => {
         })
     }
 
-    return (<form className='row g-3' onSubmit={handleSubmit(onSubmit)}  >
+    
+
+    return (<form className='row g-3' onSubmit={handleSubmit(onSubmit)} >
         <div className='col-auto mt-4'>
             AGREGAR LISTA
         </div>
@@ -35,6 +37,9 @@ const AddList = (props) => {
                 placeholder='Nombre de la lista'
                 {...register("Name", { required: true, minLength: 2 })}
             />
+            <span className="text-danger text-small d-block mb-2">
+             {errors.Name?.type === 'required' && "Minimo 2 Caracteres"}
+             </span>
         </div>
         <div className='col-auto'>
             <button className='btn btn-success'>Agregar</button>
